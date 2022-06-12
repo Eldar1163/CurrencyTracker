@@ -3,6 +3,7 @@ package com.example.currencytracker.client;
 
 import com.example.currencytracker.domain.GifObj;
 import com.example.currencytracker.domain.GifSearchResponse;
+import com.example.currencytracker.exception.InternalError;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -29,8 +30,11 @@ public class GiphyClientWrapper {
     }
 
     public GifObj getRandomGifByQuery(String query) {
-        GifSearchResponse response = giphyClient.searchGifByQuery(apiKey, query);
-        return response.getDataList().get(new Random().nextInt(response.getPagination().getCount()));
+        GifSearchResponse response = searchGifByQuery(query);
+        if (response.getPagination().getCount() > 0)
+            return response.getDataList().get(new Random().nextInt(response.getPagination().getCount()));
+        else
+            throw new InternalError("Trouble with Giphy");
     }
 
     public ResponseEntity<Resource> getRandomDirectGiffByQuery(String query) {

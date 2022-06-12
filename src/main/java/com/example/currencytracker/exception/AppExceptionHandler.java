@@ -13,4 +13,9 @@ public class AppExceptionHandler {
     public ResponseEntity<AppError> badRequestHandler(RuntimeException exception) {
         return ResponseEntity.badRequest().body(new AppError(HttpStatus.BAD_REQUEST, exception.getMessage()));
     }
+
+    @ExceptionHandler(value = {InternalError.class})
+    public ResponseEntity<AppError> internalErrorHandler(RuntimeException exception) {
+        return ResponseEntity.internalServerError().body(new AppError(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+    }
 }
