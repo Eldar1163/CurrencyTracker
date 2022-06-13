@@ -3,6 +3,7 @@ package com.example.currencytracker.service;
 import com.example.currencytracker.client.GiphyClientWrapper;
 import com.example.currencytracker.client.OpenExchangeWrapper;
 import com.example.currencytracker.domain.CurrencyResponse;
+import com.example.currencytracker.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,9 @@ public class CheckCurrencyService {
 
         Double todayCurrencyValue = latestCurrency.getRates().get(currencyName);
         Double yesterdayCurrencyValue = yesterdayCurrency.getRates().get(currencyName);
+
+        if (todayCurrencyValue == null || yesterdayCurrencyValue == null)
+            throw new BadRequestException("Not valid currency code");
 
         if (todayCurrencyValue < yesterdayCurrencyValue)
             return giphyClient.getRandomDirectGiffByQuery("Rich");
