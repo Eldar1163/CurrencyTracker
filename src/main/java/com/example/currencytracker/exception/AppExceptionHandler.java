@@ -9,7 +9,7 @@ import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class AppExceptionHandler {
-    @ExceptionHandler(value = {ConstraintViolationException.class})
+    @ExceptionHandler(value = {ConstraintViolationException.class, BadRequestException.class})
     public ResponseEntity<AppError> badRequestHandler(RuntimeException exception) {
         return ResponseEntity.badRequest().body(new AppError(HttpStatus.BAD_REQUEST, exception.getMessage()));
     }

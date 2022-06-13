@@ -25,13 +25,16 @@ public class CheckCurrencyService {
         this.giphyClient = giphyClient;
         this.openExchangeClient = openExchangeClient;
     }
-    public ResponseEntity<Resource> getResultAsImage() {
+    public ResponseEntity<Resource> getResultAsImage(String currencyCode) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate today = LocalDate. now();
         LocalDate yesterday = today. minusDays(1);
 
         CurrencyResponse latestCurrency = openExchangeClient.getLatestExchangeRates();
         CurrencyResponse yesterdayCurrency = openExchangeClient.getForAnyDayExchangeRates(yesterday.format(formatter));
+
+        if (currencyCode != null)
+            currencyName = currencyCode;
 
         Double todayCurrencyValue = latestCurrency.getRates().get(currencyName);
         Double yesterdayCurrencyValue = yesterdayCurrency.getRates().get(currencyName);
